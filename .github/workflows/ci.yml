@@ -41,10 +41,11 @@ jobs:
           REDIS_URL: redis://localhost:6379
           HUSKY: '0'
 
-      - name: Build Frontend
+      - name: Test Frontend & Coverage
         run: |
           npm ci --prefix frontend
           npm run build --prefix frontend
+          npm run test:cov --prefix frontend
         env:
           HUSKY: '0'
 
