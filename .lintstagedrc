@@ -1,0 +1,10 @@
+{
+  "frontend/src/**/*.{ts,tsx}": [
+    "npm --prefix frontend exec -- prettier --write",
+    "npm --prefix frontend exec -- eslint --fix"
+  ],
+  "backend/src/**/*.ts": [
+    "npm --prefix backend exec -- prettier --write",
+    "npm --prefix backend exec -- eslint --fix"
+  ]
+}

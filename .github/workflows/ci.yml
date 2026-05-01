@@ -1,0 +1,83 @@
+
+name: CI - OckhamLink
+
+
+on:
+
+  push:
+
+    branches: [main]
+
+  pull_request:
+
+    branches: [main]
+
+    types: [opened, edited, synchronized]
+
+
+concurrency:
+
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+  cancel-in-progress: true
+
+
+jobs:
+
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    services:
+
+      redis:
+
+        image: redis:8-alpine
+
+        ports:
+
+          - 6379:6379
+
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+
+        with:
+
+          node-version: 24
+
+          cache: 'npm'
+
+
+      - name: Test Backend
+
+        run: |
+
+          npm ci --prefix backend
+
+          npm run build --prefix backend
+
+          npm run test --prefix backend
+
+        env:
+
+          REDIS_URL: redis://localhost:6379
+
+          HUSKY: '0'
+
+
+      - name: Build Frontend
+
+        run: |
+
+          npm ci --prefix frontend
+
+          npm run build --prefix frontend
+
+        env:
+
+          HUSKY: '0'
+

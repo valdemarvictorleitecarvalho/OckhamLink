@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+echo "Verifying Build"
+
+npm run build --prefix frontend
+
+npm run build --prefix backend
+
+echo "Running Backend Tests"
+
+npm run test --prefix backend
+
