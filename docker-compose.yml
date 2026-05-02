@@ -7,14 +7,25 @@ services:
       - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
 
   frontend:
     build: ./frontend
     ports:
       - "5173:5173"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
 
   redis:
     image: redis:8-alpine
     ports:
       - "6380:6379"
     command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    
+volumes:
+  redis-data:

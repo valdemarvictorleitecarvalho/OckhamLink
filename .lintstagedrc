@@ -5,6 +5,6 @@
   ],
   "backend/src/**/*.ts": [
     "npm --prefix backend exec -- prettier --write",
-    "npm --prefix backend exec -- eslint --fix"
+    "env ESLINT_USE_FLAT_CONFIG=true npm --prefix backend exec -- eslint --fix --config backend/eslint.config.mjs"
   ]
 }

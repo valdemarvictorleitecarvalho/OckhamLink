@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ShortenerModule } from './shortener/shortener.module';
 
+/**
+ * Root module of the application.
+ * Aggregates all feature modules and sets up the foundational application graph.
+ */
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ShortenerModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
