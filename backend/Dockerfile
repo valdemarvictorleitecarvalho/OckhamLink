@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:24-slim AS builder
 
 WORKDIR /usr/src/app
 
@@ -6,9 +6,10 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
-FROM node:24-alpine
+RUN npm run build && test -d dist || (echo "Error: Dist folder was not generated!" && exit 1)
+
+FROM node:24-slim
 
 WORKDIR /usr/src/app
 
