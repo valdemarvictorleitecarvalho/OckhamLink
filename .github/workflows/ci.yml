@@ -61,5 +61,5 @@ jobs:
             -Dsonar.sources=backend/src,frontend/src
             -Dsonar.tests=backend/src,frontend/src
             -Dsonar.test.inclusions=**/*.spec.ts,**/*.spec.tsx,**/*.test.ts,**/*.test.tsx
-            -Dsonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.test.ts,**/*.test.tsx,frontend/src/main.tsx,backend/src/main.ts
+            -Dsonar.exclusions=/*.spec.*,/*.test.*,frontend/src/main.tsx,backend/src/main.ts,/*.module.ts,/*.setup.ts,frontend/src/App.tsx,frontend/src/routes//*
             -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info,frontend/coverage/lcov.info

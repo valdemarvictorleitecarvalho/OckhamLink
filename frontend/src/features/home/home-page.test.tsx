@@ -64,21 +64,28 @@ describe("HomePage Orchestrator", () => {
     expect(screen.getByText("Ockham")).toBeInTheDocument();
   });
 
-  it("should toggle 'isActive' state when OverlayPanel triggers onToggle", async () => {
+  it("should toggle 'isActive' state back and forth when OverlayPanel triggers onToggle", async () => {
     renderHomePage();
     const container = screen.getByRole("main").querySelector(".container");
-    const toggleBtn = screen.getByRole("button", {
+
+    const toggleToResolveBtn = screen.getByRole("button", {
       name: /Resolve a Link/i,
     });
-
     await act(async () => {
-      fireEvent.click(toggleBtn);
+      fireEvent.click(toggleToResolveBtn);
     });
-
     expect(container).toHaveAttribute("data-active", "true");
+
+    const toggleToShortenBtn = screen.getByRole("button", {
+      name: /Shorten a Link/i,
+    });
+    await act(async () => {
+      fireEvent.click(toggleToShortenBtn);
+    });
+    expect(container).toHaveAttribute("data-active", "false");
   });
 
-  it("should pass the correct mutation triggers to the panels", async () => {
+  it("should pass the correct mutation trigger to the Shorten panel", async () => {
     const mockShortenMutate = vi.fn().mockResolvedValue({
       resultUrl: "ok",
     });
@@ -87,11 +94,6 @@ describe("HomePage Orchestrator", () => {
       mutateAsync: mockShortenMutate,
       isLoading: false,
     } as Partial<ShortenHookResult> as ShortenHookResult);
-
-    (useResolve as Mock).mockReturnValue({
-      mutateAsync: vi.fn(),
-      isLoading: false,
-    } as Partial<ResolveHookResult> as ResolveHookResult);
 
     renderHomePage();
 
@@ -112,5 +114,36 @@ describe("HomePage Orchestrator", () => {
     });
 
     expect(mockShortenMutate).toHaveBeenCalledWith("https://test.com");
+  });
+
+  it("should pass the correct mutation trigger to the Resolve panel", async () => {
+    const mockResolveMutate = vi.fn().mockResolvedValue({
+      resultUrl: "ok",
+    });
+
+    (useResolve as Mock).mockReturnValue({
+      mutateAsync: mockResolveMutate,
+      isLoading: false,
+    } as Partial<ResolveHookResult> as ResolveHookResult);
+
+    renderHomePage();
+
+    const resolveInput = screen.getByPlaceholderText(
+      /abc123 or ockham.link\/abc123/i,
+    );
+
+    await act(async () => {
+      fireEvent.change(resolveInput, {
+        target: { value: "xyz789" },
+      });
+    });
+
+    const resolveBtn = screen.getByRole("button", { name: "Resolve Link" });
+
+    await act(async () => {
+      fireEvent.click(resolveBtn);
+    });
+
+    expect(mockResolveMutate).toHaveBeenCalledWith("xyz789");
   });
 });

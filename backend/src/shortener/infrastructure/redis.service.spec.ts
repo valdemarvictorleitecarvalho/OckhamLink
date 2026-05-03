@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RedisService } from './redis.service';
+import { RedisService, REDIS_DEFAULTS } from './redis.service';
 import { REDIS_CLIENT } from '../constants';
 import Redis from 'ioredis';
 
 /**
  * Unit tests for the RedisService. These tests cover the main functionalities of the service, including getting and
  * setting values in Redis, as well as retrieving the next unique ID. The tests also ensure that the service correctly
- * handles errors from the underlying Redis client.
+ * handles errors from the underlying Redis client, and validates exported constants.
  */
 describe('RedisService', () => {
   let service: RedisService;
@@ -36,6 +36,13 @@ describe('RedisService', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('Constants', () => {
+    it('should export REDIS_DEFAULTS with the correct fallback URL', () => {
+      expect(REDIS_DEFAULTS).toBeDefined();
+      expect(REDIS_DEFAULTS.URL).toBe('redis://localhost:6379');
+    });
   });
 
   it('should be defined', () => {

@@ -4,7 +4,7 @@ import { RedisService } from '../infrastructure/redis.service';
 
 /**
  * Unit tests for the ShortenerService. These tests cover the main functionalities of the service,
- * including URL shortening and resolution.
+ * including URL shortening and resolution, as well as multiple point-of-failure scenarios.
  */
 describe('ShortenerService', () => {
   let service: ShortenerService;
@@ -53,6 +53,20 @@ describe('ShortenerService', () => {
       expect(redisService.get).toHaveBeenCalledWith(`original:${mockUrl}`);
       expect(redisService.getNextId).not.toHaveBeenCalled();
       expect(redisService.set).not.toHaveBeenCalled();
+    });
+
+    it('should generate a new code if Redis returns an empty string (falsy check)', async () => {
+      const mockUrl = 'https://ockhamlink.com/empty';
+      const generatedId = 99;
+
+      redisService.get.mockResolvedValueOnce('');
+      redisService.getNextId.mockResolvedValueOnce(generatedId);
+
+      const result = await service.shorten(mockUrl);
+
+      expect(typeof result).toBe('string');
+      expect(result.length).toBeGreaterThanOrEqual(6);
+      expect(redisService.set).toHaveBeenCalledTimes(2);
     });
 
     it('should generate, store, and return a new short code for a previously unseen URL', async () => {
@@ -130,8 +144,8 @@ describe('ShortenerService', () => {
       expect(redisService.set).not.toHaveBeenCalled();
     });
 
-    it('should propagate errors if Redis set fails during the transaction process', async () => {
-      const mockUrl = 'https://ockhamlink.com/error-set';
+    it('should propagate errors if the FIRST Redis set fails', async () => {
+      const mockUrl = 'https://ockhamlink.com/error-set-1';
       const expectedError = new Error('OOM command not allowed');
 
       redisService.get.mockResolvedValueOnce(null);
@@ -139,6 +153,20 @@ describe('ShortenerService', () => {
       redisService.set.mockRejectedValueOnce(expectedError);
 
       await expect(service.shorten(mockUrl)).rejects.toThrow(expectedError);
+      expect(redisService.set).toHaveBeenCalledTimes(1);
+    });
+
+    it('should propagate errors if the SECOND Redis set (reverse lookup caching) fails', async () => {
+      const mockUrl = 'https://ockhamlink.com/error-set-2';
+      const expectedError = new Error('Connection lost before second set');
+
+      redisService.get.mockResolvedValueOnce(null);
+      redisService.getNextId.mockResolvedValueOnce(11);
+      redisService.set.mockResolvedValueOnce();
+      redisService.set.mockRejectedValueOnce(expectedError);
+
+      await expect(service.shorten(mockUrl)).rejects.toThrow(expectedError);
+      expect(redisService.set).toHaveBeenCalledTimes(2);
     });
   });
 

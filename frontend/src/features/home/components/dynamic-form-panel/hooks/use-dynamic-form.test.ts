@@ -123,6 +123,19 @@ describe("useDynamicForm Hook", () => {
     expect(result.current.copied).toBe(false);
   });
 
+  it("should not attempt to copy to clipboard if resultData is null", async () => {
+    const { result } = renderHook(() =>
+      useDynamicForm({ onSubmit: mockOnSubmit }),
+    );
+
+    await act(async () => {
+      await result.current.handleCopy();
+    });
+
+    expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+    expect(result.current.copied).toBe(false);
+  });
+
   it("should reset the form correctly", () => {
     const { result } = renderHook(() =>
       useDynamicForm({ onSubmit: mockOnSubmit }),
