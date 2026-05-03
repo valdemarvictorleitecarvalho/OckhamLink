@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ShortenerController } from './shortener.controller';
 import { ShortenerService } from '../services/shortener.service';
-import { NotFoundException, HttpStatus } from '@nestjs/common';
+import { HttpStatus, NotFoundException } from '@nestjs/common';
 
 /**
  * Unit tests for the ShortenerController. These tests cover the main functionalities of the controller,

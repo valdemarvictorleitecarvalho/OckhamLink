@@ -1,4 +1,4 @@
-import { ValidationPipe, type INestApplication } from '@nestjs/common';
+import { type INestApplication, ValidationPipe } from '@nestjs/common';
 
 /**
  * Configures global validation pipes for the NestJS application. This setup ensures that incoming requests are validated
