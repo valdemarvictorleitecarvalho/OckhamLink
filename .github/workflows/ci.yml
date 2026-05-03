@@ -59,4 +59,7 @@ jobs:
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.sources=backend/src,frontend/src
-            -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
+            -Dsonar.tests=backend/src,frontend/src
+            -Dsonar.test.inclusions=**/*.spec.ts,**/*.spec.tsx,**/*.test.ts,**/*.test.tsx
+            -Dsonar.exclusions=**/*.spec.ts,**/*.spec.tsx,**/*.test.ts,**/*.test.tsx,frontend/src/main.tsx,backend/src/main.ts
+            -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info,frontend/coverage/lcov.info
