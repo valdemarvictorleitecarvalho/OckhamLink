@@ -79,26 +79,37 @@ describe("DynamicFormPanel Component", () => {
   });
 
   it("should handle the full user journey: type, submit, loading, success, and reset", async () => {
-    const mockSubmit = vi.fn().mockResolvedValue({
-      resultUrl: "https://ock.hm/123",
-      qrCodeUrl: "https://fake-qr.com/img.png",
-    });
+    let resolveSubmit: (value: {
+      resultUrl: string;
+      qrCodeUrl: string;
+    }) => void;
+    const mockSubmit = vi.fn().mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          resolveSubmit = resolve;
+        }),
+    );
 
     render(<DynamicFormPanel {...defaultProps} onSubmit={mockSubmit} />);
 
     const input = screen.getByPlaceholderText("Paste your long URL here");
     const submitBtn = screen.getByRole("button", { name: "Shorten Link" });
 
-    await act(async () => {
-      fireEvent.change(input, {
-        target: { value: "https://my-huge-website.com/path" },
-      });
-      fireEvent.click(submitBtn);
+    fireEvent.change(input, {
+      target: { value: "https://my-huge-website.com/path" },
     });
+    fireEvent.click(submitBtn);
 
     const loadingBtn = screen.getByRole("button", { name: "Processing" });
     expect(loadingBtn).toBeInTheDocument();
     expect(loadingBtn).toBeDisabled();
+
+    await act(async () => {
+      resolveSubmit({
+        resultUrl: "https://ock.hm/123",
+        qrCodeUrl: "https://fake-qr.com/img.png",
+      });
+    });
 
     await waitFor(() => {
       expect(screen.getByText("https://ock.hm/123")).toBeInTheDocument();
@@ -120,8 +131,6 @@ describe("DynamicFormPanel Component", () => {
   });
 
   it("should render success without QR code and handle safe clipboard copy interaction", async () => {
-    vi.useFakeTimers();
-
     const mockSubmit = vi.fn().mockResolvedValue({
       resultUrl: "https://ock.hm/no-qr",
     });
@@ -142,8 +151,9 @@ describe("DynamicFormPanel Component", () => {
 
     expect(screen.queryByAltText("QR Code")).not.toBeInTheDocument();
 
-    const copyBtn = screen.getByTitle("Copy to clipboard");
+    vi.useFakeTimers();
 
+    const copyBtn = screen.getByTitle("Copy to clipboard");
     expect(copyBtn.querySelector(".fa-copy")).toBeInTheDocument();
 
     await act(async () => {
@@ -155,7 +165,7 @@ describe("DynamicFormPanel Component", () => {
     );
     expect(copyBtn.querySelector(".fa-check")).toBeInTheDocument();
 
-    await act(async () => {
+    act(() => {
       vi.advanceTimersByTime(2000);
     });
 
