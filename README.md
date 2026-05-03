@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop" alt="OckhamLink Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
+  <img src=".github/assets/ockhamlink-banner.png" alt="OckhamLink Banner" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
 
   <h1>OckhamLink</h1>
   
