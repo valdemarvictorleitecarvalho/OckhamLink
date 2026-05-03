@@ -4,17 +4,17 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm ci
+RUN npm ci --prefix backend
 
 RUN npm run build --prefix backend
-
-RUN npm prune --omit=dev
 
 FROM node:24-slim
 
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app .
+
+RUN npm ci --omit=dev --prefix backend
 
 RUN rm -rf frontend
 
