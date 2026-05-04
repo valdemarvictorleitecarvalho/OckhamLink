@@ -9,11 +9,15 @@
     background: var(--brand-gradient);
     border-left: 1px solid var(--border-glass);
     border-radius: 150px 0 0 100px;
-    transition: translate 0.6s ease-in-out, border-radius 0.6s ease-in-out;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out, border-radius 0.6s ease-in-out;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
+    backface-visibility: hidden;
 }
 
 .overlay-container[data-active="true"] {
-    translate: -100% 0;
+    transform: translateX(-100%);
     border-radius: 0 150px 100px 0;
     border-left: none;
     border-right: 1px solid var(--border-glass);
@@ -38,7 +42,7 @@
     color: white;
     transition:
         opacity 0.6s ease-in-out,
-        translate 0.6s ease-in-out,
+        transform 0.6s ease-in-out, 
         visibility 0.6s;
 }
 
@@ -81,25 +85,25 @@
 .toggle-left {
     opacity: 0;
     visibility: hidden;
-    translate: -50px 0;
+    transform: translateX(-50px);
 }
 
 .overlay-container[data-active="true"] .toggle-left {
     opacity: 1;
     visibility: visible;
-    translate: 0 0;
+    transform: translateX(0);
 }
 
 .toggle-right {
     opacity: 1;
     visibility: visible;
-    translate: 0 0;
+    transform: translateX(0);
 }
 
 .overlay-container[data-active="true"] .toggle-right {
     opacity: 0;
     visibility: hidden;
-    translate: 50px 0;
+    transform: translateX(50px);
 }
 
 @media (max-width: 768px) {
@@ -111,20 +115,21 @@
         border-radius: 0;
         border-top: 1px solid var(--border-glass);
         border-left: none;
+        transform: translateY(0);
     }
 
     .overlay-container[data-active="true"] {
-        translate: 0 -100%;
+        transform: translateY(-100%);
         border-radius: 0;
         border-right: none;
         border-bottom: 1px solid var(--border-glass);
     }
 
     .toggle-left {
-        translate: 0 -30px;
+        transform: translateY(-30px);
     }
 
     .overlay-container[data-active="true"] .toggle-right {
-        translate: 0 30px;
+        transform: translateY(30px);
     }
 }
