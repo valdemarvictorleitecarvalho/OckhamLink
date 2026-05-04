@@ -1,8 +1,12 @@
 FROM node:24-slim AS builder
+
 WORKDIR /usr/src/app
+
 COPY . .
-RUN npm ci --prefix backend
-RUN npm run build --prefix backend
+
+WORKDIR /usr/src/app/backend
+RUN npm ci
+RUN npm run build
 
 FROM node:24-slim
 WORKDIR /usr/src/app
