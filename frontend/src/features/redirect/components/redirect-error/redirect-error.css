@@ -1,0 +1,59 @@
+.error-glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.gradient-text-404 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.error-glass-card h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+}
+
+.error-glass-card p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 2rem 0;
+}
+
+.btn-return-home {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: white;
+    border-radius: 8px;
+    padding: 12px 40px;
+    width: 100%; 
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-return-home:hover {
+    background: white;
+    color: var(--brand-purple);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.btn-return-home:active {
+    scale: 0.98;
+}

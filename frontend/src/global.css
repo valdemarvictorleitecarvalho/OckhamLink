@@ -26,3 +26,14 @@
     box-sizing: border-box;
     font-family: "Inter", sans-serif;
 }
+
+.redirect-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: inherit;
+    padding: 1rem;
+}
