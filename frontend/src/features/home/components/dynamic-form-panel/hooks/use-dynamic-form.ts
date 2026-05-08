@@ -40,12 +40,39 @@ export const useDynamicForm = ({ onSubmit }: UseDynamicFormProps) => {
   /**
    * Copies the resolved/shortened URL to the user's clipboard.
    * Temporarily toggles the `copied` state to true for 2 seconds to provide visual feedback.
+   * To handle with http S3, try to copy with a deprecated command, because http sites are
+   * blocked to copy with clipboard API.
    */
   const handleCopy = async () => {
-    if (resultData) {
-      await navigator.clipboard.writeText(resultData.resultUrl);
+    if (!resultData?.resultUrl) return;
+
+    if (navigator.clipboard && globalThis.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(resultData.resultUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+        return;
+      } catch (err) {
+        console.error("Failed to copy using clipboard API", err);
+      }
+    }
+
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = resultData.resultUrl;
+
+      textArea.style.position = "absolute";
+      textArea.style.left = "-999999px";
+      document.body.prepend(textArea);
+
+      textArea.select();
+      document.execCommand("copy");
+      textArea.remove();
+
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy using execCommand", err);
     }
   };
 
