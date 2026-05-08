@@ -57,3 +57,4 @@ jobs:
           flags: '--allow-unauthenticated' 
           env_vars: |   
             REDIS_URL=${{ secrets.REDIS_URL }}
+            FRONTEND_URL=${{ vars.FRONTEND_URL }}
