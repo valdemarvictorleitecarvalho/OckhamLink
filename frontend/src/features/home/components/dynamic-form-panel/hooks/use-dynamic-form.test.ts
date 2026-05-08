@@ -8,6 +8,11 @@ Object.assign(navigator, {
   },
 });
 
+Object.defineProperty(globalThis, "isSecureContext", {
+  value: true,
+  writable: true,
+});
+
 /**
  * Unit tests for the useDynamicForm custom hook. These tests cover the initialization of state variables, handling of
  * input changes, form submission logic including successful and error scenarios, clipboard copying functionality, and

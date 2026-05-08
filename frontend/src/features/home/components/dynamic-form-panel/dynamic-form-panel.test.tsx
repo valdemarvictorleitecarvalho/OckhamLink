@@ -12,6 +12,11 @@ Object.assign(navigator, {
   clipboard: { writeText: vi.fn() },
 });
 
+Object.defineProperty(globalThis, "isSecureContext", {
+  value: true,
+  writable: true,
+});
+
 /**
  * Unit tests for the DynamicFormPanel component. These tests cover rendering of both "shorten" and "resolve" variants,
  * as well as the full user interaction flow including input changes, form submission, loading state, successful result display,
