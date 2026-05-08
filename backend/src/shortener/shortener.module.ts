@@ -18,7 +18,20 @@ import { REDIS_CLIENT } from './constants';
     {
       provide: REDIS_CLIENT,
       useFactory: () => {
-        return new Redis(process.env.REDIS_URL || REDIS_DEFAULTS.URL);
+        const redisUrl = process.env.REDIS_URL || REDIS_DEFAULTS.URL;
+
+        const requiresTls = redisUrl.startsWith('rediss://');
+
+        return new Redis(
+          redisUrl,
+          requiresTls
+            ? {
+                tls: {
+                  rejectUnauthorized: false,
+                },
+              }
+            : {},
+        );
       },
     },
   ],
