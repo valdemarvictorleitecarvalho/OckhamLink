@@ -6,12 +6,13 @@ on:
       - main
     paths:
       - 'backend/**'
+      - '.github/workflows/deploy-back.yml'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   REGION: us-east1
   REPO_NAME: ockham-repo 
-  SERVICE_NAME: ockhamlink-backend
+  SERVICE_NAME: ockhamlk-backend
 
 permissions:
   contents: read
